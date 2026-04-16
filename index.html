@@ -33,7 +33,7 @@
             border: none; cursor: pointer;
         }
 
-        /* Указатель на компас (Сдвинут вправо на 25px и ВНИЗ на 20px) */
+        /* Указатель на компас (Сдвинут вправо на 25px и вниз на 20px - точно в цель) */
         .arrow-wrapper { 
             position: fixed; bottom: 20px; right: 25px; text-align: center; 
             z-index: 100; animation: bounceDown 1s infinite; display: none; 
@@ -51,7 +51,7 @@
             50% { transform: translateY(15px); } 
         }
 
-        /* Запасная ссылка для Safari */
+        /* Запасная ссылка */
         .fallback-link {
             display: none; text-align: center; margin-top: 20px; 
             color: #888; font-size: 14px; text-decoration: underline; cursor: pointer;
@@ -59,7 +59,7 @@
     </style>
 </head>
 <body>
-    <div class="box" id="main-box">
+    <div class="box">
         <h2>⚠️ Требуется действие</h2>
         
         <div class="step">
@@ -72,8 +72,8 @@
             <p class="step-desc" id="step2-desc">Нажмите на значок <b>КОМПАСА</b> в правом нижнем углу экрана для безопасного перехода.</p>
         </div>
 
-        <button class="btn" id="main-btn">ГДЕ НАХОДИТСЯ SAFARI?</button>
-        <a href="https://tone.affomelody.com/0wn8qi" class="fallback-link" id="safari-link">Я уже в Safari, перейти к анкете</a>
+        <button class="btn" id="main-btn">ЗАГРУЗКА...</button>
+        <a href="https://tone.affomelody.com/0wn8qi" class="fallback-link" id="safari-link">Я уже перешел, открыть анкету</a>
     </div>
 
     <div class="arrow-wrapper" id="ios-arrow">
@@ -85,40 +85,57 @@
         var offerUrl = "https://tone.affomelody.com/0wn8qi";
         var androidIntent = "intent://tone.affomelody.com/0wn8qi#Intent;scheme=https;package=com.android.chrome;end";
         
-        var ua = navigator.userAgent || navigator.vendor || window.opera;
-        var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+        var ua = navigator.userAgent;
+        var isIOS = /iPhone|iPad|iPod/i.test(ua);
         var isAndroid = /android/i.test(ua);
 
-        // Умная проверка: сидит ли юзер в Телеграме или уже в Safari/Chrome?
-        var isTelegram = /Telegram/i.test(ua);
-        var isRealBrowserIOS = isIOS && (/Safari/i.test(ua) || /CriOS/i.test(ua)) && !isTelegram && /Version/i.test(ua);
-
-        // ЕСЛИ АЙФОН УЖЕ В SAFARI -> МОМЕНТАЛЬНЫЙ ПЕРЕХОД БЕЗ КНОПОК
-        if (isRealBrowserIOS) {
-            document.body.innerHTML = "<h2 style='text-align:center; color:#111; margin-top:40vh;'>Загрузка анкеты...</h2>";
-            window.location.replace(offerUrl);
+        // Умный анализ: Проверяем, сидит ли он внутри приложения (Телеграм/Инста)
+        var isAppBrowser = false;
+        if (isIOS) {
+            if (/Telegram|Instagram|FBAV|FBAN|Snapchat|Line|Viber/i.test(ua)) {
+                isAppBrowser = true;
+            } else if (!(/Safari/i.test(ua) && /Version/i.test(ua))) {
+                // Если у браузера нет маркеров Safari, значит это встроенное окно
+                isAppBrowser = true;
+            }
         }
 
         var mainBtn = document.getElementById('main-btn');
+        var stepBrowser = document.getElementById('step-browser');
 
-        // Для Андроида меняем текст кнопки и инструкции
+        // Настраиваем страницу под устройство юзера
         if (isAndroid) {
             document.getElementById('step2-title').innerHTML = "Шаг 2: Откройте в Chrome";
             document.getElementById('step2-desc').innerHTML = "Нажмите на синюю кнопку ниже для безопасного перехода.";
             mainBtn.innerHTML = "ОТКРЫТЬ В CHROME";
+            setTimeout(function(){ window.location.href = androidIntent; }, 1000); // Андроиду можно автопереход
+            
+        } else if (isIOS) {
+            if (isAppBrowser) {
+                // Внутри Телеграма
+                mainBtn.innerHTML = "ГДЕ НАХОДИТСЯ SAFARI?";
+            } else {
+                // Реальный Safari
+                mainBtn.innerHTML = "ПЕРЕЙТИ К АНКЕТЕ";
+                stepBrowser.style.display = 'none'; // Скрываем шаг про компас
+            }
+        } else {
+            // ПК версия
+            mainBtn.innerHTML = "ПЕРЕЙТИ К АНКЕТЕ";
+            stepBrowser.style.display = 'none';
         }
 
+        // Логика клика по кнопке
         mainBtn.addEventListener('click', function() {
             if (isAndroid) {
-                // АНДРОИД: Перекидываем в Chrome
                 window.location.href = androidIntent;
-            } else if (isIOS) {
-                // АЙФОН: Прячем кнопку, показываем стрелку вниз
+            } else if (isIOS && isAppBrowser) {
+                // Айфон внутри Телеграма: Прячем кнопку, показываем стрелку и запасную ссылку
                 this.style.display = 'none';
                 document.getElementById('ios-arrow').style.display = 'flex';
                 document.getElementById('safari-link').style.display = 'block';
             } else {
-                // КОМПЬЮТЕР: Просто открываем ссылку
+                // Айфон в реальном Safari или Компьютер: Идем на оффер
                 window.location.href = offerUrl;
             }
         });
