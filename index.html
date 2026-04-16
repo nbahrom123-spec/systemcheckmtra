@@ -2,91 +2,172 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в систему</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Безопасный вход</title>
     <style>
         body {
-            background-color: #121212;
+            background-color: #0c0d10;
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
             text-align: center;
-            padding: 20px;
         }
-        h2 { font-size: 24px; margin-bottom: 10px; }
-        p { font-size: 16px; color: #aaaaaa; margin-bottom: 30px; line-height: 1.5; }
-        .btn {
-            background-color: #0088cc;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            display: inline-block;
-            width: 80%;
-            max-width: 300px;
-            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
-        }
-        #instruction {
+
+        h1 { font-size: 26px; margin-bottom: 5px; color: #ffeb3b;}
+        p { font-size: 16px; color: #aaaaaa; margin-bottom: 25px; line-height: 1.4;}
+
+        .icon-shield { font-size: 70px; margin-bottom: 10px; color: #00e676;}
+
+        /* Общие стили для инструкций */
+        #os-instruction {
             display: none;
-            margin-top: 30px;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
             padding: 20px;
-            background: rgba(255, 235, 59, 0.1);
-            border-radius: 10px;
-            font-size: 16px;
-            color: #ffeb3b;
-            border: 2px dashed #ffeb3b;
-            width: 85%;
-            max-width: 350px;
-            line-height: 1.6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid #333;
         }
-        .arrow {
-            font-size: 40px;
-            display: block;
-            margin-top: 15px;
-            animation: bounce 1s infinite;
+
+        .step-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #ffffff;}
+        .target-text { color: #ffeb3b; font-weight: bold;}
+
+        /* Блок для iOS (Айфон) */
+        .ios-visual { position: relative; width: 280px; height: 180px; background: rgba(0,0,0,0.5); border-radius: 10px; margin: 20px auto; border: 1px solid #444;}
+        
+        /* Рисуем "панель" Safari снизу */
+        .safari-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 35px; background: rgba(255, 255, 255, 0.1); border-top: 1px solid #555;}
+        
+        /* Рисуем значок компаса (как на скриншоте image_10.png) */
+        .compass-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 15px;
+            width: 25px;
+            height: 25px;
+            border: 2px solid #ffeb3b; /* Желтый для подсветки */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
+        .compass-icon::after {
+            content: '';
+            width: 14px;
+            height: 2px;
+            background: #ffeb3b;
+            transform: rotate(45deg);
         }
+        .compass-icon::before {
+            content: '';
+            width: 14px;
+            height: 2px;
+            background: #ffeb3b;
+            transform: rotate(-45deg);
+            position: absolute;
+        }
+
+        /* Желтая стрелка для iOS */
+        .bounce-arrow-ios { position: absolute; bottom: 35px; right: 15px; font-size: 35px; animation: bounce-ios 1s infinite;}
+        @keyframes bounce-ios { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        /* Блок для Android */
+        .android-visual { position: relative; width: 280px; height: 180px; background: rgba(0,0,0,0.5); border-radius: 10px; margin: 20px auto; border: 1px solid #444;}
+        
+        /* Рисуем "шапку" Телеграм сверху */
+        .telegram-bar { position: absolute; top: 0; left: 0; width: 100%; height: 30px; background: rgba(255, 255, 255, 0.1); border-bottom: 1px solid #555;}
+        
+        /* Рисуем три точки (кебаб-меню) */
+        .dots-icon {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            width: 5px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .dots-icon::after, .dots-icon::before, .dots-icon-mid {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: #ffeb3b; /* Желтый для подсветки */
+            border-radius: 50%;
+        }
+        .dots-icon-mid { position: absolute; top: 8px;}
+
+        /* Желтая стрелка для Android */
+        .bounce-arrow-android { position: absolute; top: 30px; right: 15px; font-size: 35px; animation: bounce-android 1s infinite;}
+        @keyframes bounce-android { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
     </style>
 </head>
 <body>
 
-    <h2>Анкета готова к просмотру 🔞</h2>
-    <p>Телеграм может блокировать фото. Нажми кнопку ниже, чтобы открыть анкету.</p>
+    <div class="icon-shield">🛡️</div>
+    <h1>Безопасная зона</h1>
+    <p>Мы защищаем ваше соединение. Пожалуйста, следуйте инструкции.</p>
 
-    <a href="https://tone.affomelody.com/0wn8qi" target="_blank" rel="noopener noreferrer" class="btn" id="go-btn">
-        ОТКРЫТЬ В БРАУЗЕРЕ
-    </a>
+    <div id="os-instruction">
+        <div id="ios-block" style="display: none;">
+            <div class="step-title">1. Перейдите в <span class="target-text">Safari</span></div>
+            <p>Телеграм ограничивает работу сайта.<br>Нажмите на компас в углу, чтобы продолжить.</p>
+            <div class="ios-visual">
+                <div class="safari-bar">
+                    <div class="compass-icon"></div>
+                </div>
+                <span class="bounce-arrow-ios">👇↘️</span>
+            </div>
+        </div>
 
-    <div id="instruction"></div>
+        <div id="android-block" style="display: none;">
+            <div class="step-title">1. Откройте <span class="target-text">в браузере</span></div>
+            <p>Нажмите на три точки вверху.<br>Выберите «Открыть в браузере».</p>
+            <div class="android-visual">
+                <div class="telegram-bar">
+                    <div class="dots-icon">
+                        <div class="dots-icon-mid"></div>
+                    </div>
+                </div>
+                <span class="bounce-arrow-android">↗️👆</span>
+            </div>
+        </div>
+    </div>
 
     <script>
-        document.getElementById('go-btn').addEventListener('click', function(e) {
-            // Определяем устройство пользователя
+        window.onload = function() {
             var ua = navigator.userAgent || navigator.vendor || window.opera;
-            var instr = document.getElementById('instruction');
-            
-            // Показываем блок с инструкцией
+            var instr = document.getElementById('os-instruction');
+            var ios = document.getElementById('ios-block');
+            var android = document.getElementById('android-block');
+
             instr.style.display = 'block';
 
-            // Если это iPhone / iPad (iOS)
+            // Определение iOS (iPhone/iPad/iPod)
             if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-                instr.innerHTML = "<b>У ТЕБЯ АЙФОН? 🍎</b><br><br>Сайт не откроется внутри Телеграма!<br>Нажми на значок <b>КОМПАСА</b> в правом нижнем углу экрана, чтобы перейти к анкете! <span class='arrow'>↘️</span>";
+                ios.style.display = 'block';
             } 
-            // Если это Android или ПК
+            // Определение Android
+            else if (/Android/.test(ua)) {
+                android.style.display = 'block';
+            } 
+            // Fallback для ПК или других систем — просто показываем Android версию как универсальную
             else {
-                instr.innerHTML = "<b>ВАЖНО! 🤖</b><br><br>Сайт может выдать ошибку внутри Телеграма.<br>Нажми на <b>ТРИ ТОЧКИ</b> в правом верхнем углу и выбери <b>«Открыть в браузере»</b>! <span class='arrow'>↗️</span>";
+                android.style.display = 'block';
+                // Немного меняем текст, если это точно не телефон
+                if(!/Mobile/.test(ua)) {
+                    android.querySelector('p').innerHTML = "Нажмите на три точки в меню вашего браузера и выберите «Открыть в новом окне».";
+                }
             }
-        });
+        };
     </script>
 
 </body>
