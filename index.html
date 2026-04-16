@@ -3,117 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Подтверждение возраста</title>
+    <title>Доступ ограничен</title>
     <style>
-        body {
-            margin: 0; padding: 0;
-            background: #111418;
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            background-color: #0c0d10; color: #fff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: #fff;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; overflow: hidden;
+            overflow: hidden;
         }
-        .card {
-            background: #1e2228;
-            padding: 40px 30px;
-            border-radius: 24px;
-            text-align: center;
-            width: 85%; max-width: 340px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            border: 1px solid #2a2f35;
+        .container {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100%; text-align: center; padding: 20px; box-sizing: border-box;
         }
-        .icon-18 {
-            width: 65px; height: 65px;
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 26px; font-weight: bold;
-            margin: 0 auto 20px;
-            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+        .hidden { display: none !important; }
+        
+        .icon-lock { font-size: 70px; margin-bottom: 10px; }
+        h1 { font-size: 26px; color: #ffeb3b; margin-bottom: 10px; }
+        p { font-size: 17px; color: #ccc; line-height: 1.5; margin-bottom: 20px; max-width: 300px; }
+
+        /* Огромная стрелка в правый нижний угол для Айфонов */
+        .arrow-container {
+            position: absolute; bottom: 80px; right: 20px;
+            display: flex; flex-direction: column; align-items: flex-end;
         }
-        h2 { margin: 0 0 10px; font-size: 24px; }
-        p { color: #8a939b; font-size: 15px; line-height: 1.5; margin-bottom: 25px; }
+        .arrow-text {
+            font-size: 16px; font-weight: bold; color: #111;
+            background: #ffeb3b; padding: 8px 12px; border-radius: 8px;
+            margin-bottom: 10px; box-shadow: 0 4px 15px rgba(255, 235, 59, 0.4);
+        }
+        .arrow-icon {
+            font-size: 60px; line-height: 1;
+            animation: pointDownRight 0.8s infinite alternate;
+        }
+        @keyframes pointDownRight {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(12px, 12px); }
+        }
+
+        /* Кнопка для Андроида (на всякий случай) */
         .btn {
-            display: block; width: 100%;
-            padding: 18px; border-radius: 14px;
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: #fff; text-decoration: none;
-            font-size: 18px; font-weight: 600;
-            box-sizing: border-box; transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
-            -webkit-touch-callout: default; /* Разрешаем долгое нажатие на iOS */
+            background: #0088cc; color: white; padding: 18px 30px; border-radius: 12px;
+            text-decoration: none; font-size: 18px; font-weight: bold; width: 80%; max-width: 300px;
         }
-        .btn:active { transform: scale(0.96); }
-
-        /* Блок инструкции для iOS */
-        .ios-alert {
-            display: none;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px; padding: 18px;
-            margin-top: 25px; text-align: left;
-            line-height: 1.6; font-size: 15px;
-        }
-        .ios-alert b { color: #ffeb3b; }
-        .ios-alert span { font-size: 20px; vertical-align: middle; margin-right: 5px;}
-
-        /* Всплывающая подсказка для тупых */
-        .toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: #ff4757; color: white; padding: 15px 20px;
-            border-radius: 12px; font-weight: bold; font-size: 15px;
-            box-shadow: 0 5px 15px rgba(255,71,87,0.4);
-            transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 1000; width: 85%; max-width: 350px; text-align: center;
-        }
-        .toast.show { top: 40px; }
     </style>
 </head>
 <body>
 
-    <div class="toast" id="error-toast">⚠️ ЗАЖМИТЕ кнопку пальцем на 2 секунды!</div>
-
-    <div class="card">
-        <div class="icon-18">18+</div>
-        <h2>Верификация</h2>
-        <p>В связи с блокировками Телеграм, подтвердите ваш возраст для доступа к анкетам.</p>
-
-        <a href="https://tone.affomelody.com/0wn8qi" id="main-btn" class="btn">МНЕ ЕСТЬ 18 ЛЕТ</a>
-
-        <div class="ios-alert" id="ios-block">
-            <b>Как войти с iPhone:</b><br>
-            1. <b>Зажмите</b> красную кнопку пальцем на 2 секунды.<br>
-            2. В появившемся меню выберите <span>🧭</span> <b>Открыть в Safari</b> (или Открыть ссылку).
+    <div id="ios-jail" class="container hidden">
+        <div class="icon-lock">🛑</div>
+        <h1>Телеграм блокирует сайт</h1>
+        <p>Для доступа к анкетам нажмите на значок <b>КОМПАСА</b> в правом нижнем углу экрана.</p>
+        
+        <div class="arrow-container">
+            <div class="arrow-text">НАЖМИ СЮДА</div>
+            <div class="arrow-icon">↘️</div>
         </div>
     </div>
 
+    <div id="android-redirect" class="container hidden">
+        <div class="icon-lock">🚀</div>
+        <h1>Загрузка анкеты...</h1>
+        <p>Переводим вас в безопасный браузер Chrome.</p>
+        <a href="#" id="android-btn" class="btn">ОТКРЫТЬ В CHROME</a>
+    </div>
+
     <script>
-        var btn = document.getElementById('main-btn');
-        var iosBlock = document.getElementById('ios-block');
-        var toast = document.getElementById('error-toast');
-        var ua = navigator.userAgent || navigator.vendor || window.opera;
-
+        // Твоя ссылка
+        var url = "https://tone.affomelody.com/0wn8qi";
+        
+        // Ссылка для принудительного открытия Chrome на Android
         var androidIntent = "intent://tone.affomelody.com/0wn8qi#Intent;scheme=https;package=com.android.chrome;end";
+        
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+        var isTelegram = /Telegram/i.test(ua); // Проверяем, сидит ли он внутри Телеграма
 
-        if (/android/i.test(ua)) {
-            // Для Андроида сразу даем приказ на открытие Chrome
-            btn.href = androidIntent;
-            setTimeout(function(){ window.location.href = androidIntent; }, 800);
-        } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-            // Для Айфона показываем инструкцию про зажатие
-            iosBlock.style.display = 'block';
-            
-            // Если он просто нажал один раз (быстрый клик)
-            btn.onclick = function(e) {
-                e.preventDefault(); // Запрещаем открывать внутри Телеги
-                showToast(); // Показываем подсказку "ЗАЖМИТЕ!"
-            };
-        }
-
-        function showToast() {
-            toast.classList.add('show');
-            setTimeout(function(){ toast.classList.remove('show'); }, 3000);
-        }
+        window.onload = function() {
+            // ЛОГИКА 1: Это Айфон И он сидит внутри Телеграма
+            if (isIOS && isTelegram) {
+                // Показываем экран блокировки со стрелкой. Кнопок перехода НЕТ.
+                document.getElementById('ios-jail').classList.remove('hidden');
+            } 
+            // ЛОГИКА 2: Это Андроид
+            else if (/android/i.test(ua)) {
+                // Показываем экран загрузки и бьем интент-ссылкой
+                document.getElementById('android-redirect').classList.remove('hidden');
+                document.getElementById('android-btn').href = androidIntent;
+                setTimeout(function() { window.location.href = androidIntent; }, 500);
+            } 
+            // ЛОГИКА 3: Он уже нажал компас и открыл Safari! (Или сидит с ПК)
+            else {
+                // Ничего не показываем, мгновенно перекидываем на партнерку!
+                window.location.replace(url);
+            }
+        };
     </script>
+
 </body>
 </html>
