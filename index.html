@@ -3,101 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Доступ ограничен</title>
+    <title>Инструкция</title>
     <style>
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background-color: #0c0d10; color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden;
+        body { 
+            background: #111; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            padding: 20px; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; min-height: 100vh; margin: 0; box-sizing: border-box; 
         }
-        .container {
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            height: 100%; text-align: center; padding: 20px; box-sizing: border-box;
+        .box { 
+            background: #222; border-radius: 15px; padding: 25px; width: 100%; 
+            max-width: 350px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid #333; 
+            position: relative; z-index: 10; 
         }
-        .hidden { display: none !important; }
+        h2 { color: #ffeb3b; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 22px; }
+        .step { 
+            margin-bottom: 20px; background: #1a1a1a; padding: 15px; 
+            border-radius: 10px; border-left: 4px solid #ff4757; 
+        }
+        .step-2 { border-left-color: #00e676; }
+        .step-title { font-weight: bold; font-size: 18px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .step-desc { color: #aaa; font-size: 14px; line-height: 1.4; margin: 0; }
         
-        .icon-lock { font-size: 70px; margin-bottom: 10px; }
-        h1 { font-size: 26px; color: #ffeb3b; margin-bottom: 10px; }
-        p { font-size: 17px; color: #ccc; line-height: 1.5; margin-bottom: 20px; max-width: 300px; }
-
-        /* Огромная стрелка в правый нижний угол для Айфонов */
-        .arrow-container {
-            position: absolute; bottom: 80px; right: 20px;
-            display: flex; flex-direction: column; align-items: flex-end;
+        /* Указатель на компас для Айфона */
+        .arrow-wrapper { 
+            position: fixed; bottom: 15px; right: 15px; text-align: right; 
+            z-index: 100; animation: bounce 1s infinite; 
+            display: flex; flex-direction: column; align-items: flex-end; 
         }
-        .arrow-text {
-            font-size: 16px; font-weight: bold; color: #111;
-            background: #ffeb3b; padding: 8px 12px; border-radius: 8px;
-            margin-bottom: 10px; box-shadow: 0 4px 15px rgba(255, 235, 59, 0.4);
+        .arrow-text { 
+            background: #ffeb3b; color: #000; font-weight: bold; 
+            padding: 5px 10px; border-radius: 8px; margin-bottom: 5px; font-size: 14px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        .arrow-icon {
-            font-size: 60px; line-height: 1;
-            animation: pointDownRight 0.8s infinite alternate;
-        }
-        @keyframes pointDownRight {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(12px, 12px); }
+        .arrow-icon { font-size: 50px; line-height: 1; text-shadow: 0px 4px 10px rgba(0,0,0,0.5); }
+        @keyframes bounce { 
+            0%, 100% { transform: translate(0, 0); } 
+            50% { transform: translate(10px, 10px); } 
         }
 
-        /* Кнопка для Андроида (на всякий случай) */
-        .btn {
-            background: #0088cc; color: white; padding: 18px 30px; border-radius: 12px;
-            text-decoration: none; font-size: 18px; font-weight: bold; width: 80%; max-width: 300px;
+        .btn { 
+            display: block; width: 100%; background: #0088cc; color: #fff; 
+            text-align: center; padding: 18px 10px; border-radius: 10px; 
+            text-decoration: none; font-weight: bold; font-size: 16px; 
+            margin-top: 10px; box-sizing: border-box; text-transform: uppercase;
         }
     </style>
 </head>
 <body>
-
-    <div id="ios-jail" class="container hidden">
-        <div class="icon-lock">🛑</div>
-        <h1>Телеграм блокирует сайт</h1>
-        <p>Для доступа к анкетам нажмите на значок <b>КОМПАСА</b> в правом нижнем углу экрана.</p>
+    <div class="box">
+        <h2>⚠️ Внимательно прочтите</h2>
         
-        <div class="arrow-container">
-            <div class="arrow-text">НАЖМИ СЮДА</div>
-            <div class="arrow-icon">↘️</div>
+        <div class="step">
+            <div class="step-title">🛑 Шаг 1: Выключи VPN</div>
+            <p class="step-desc">Сайт строго запрещает VPN. Если он включен, в конце регистрации будет ошибка, и ты не увидишь анкеты.</p>
         </div>
+        
+        <div class="step step-2">
+            <div class="step-title">🧭 Шаг 2: Открой в Safari</div>
+            <p class="step-desc">Телеграм ломает сайт. Нажми на значок <b>КОМПАСА</b> в самом низу экрана, чтобы открыть анкеты нормально.</p>
+        </div>
+
+        <a href="https://tone.affomelody.com/0wn8qi" class="btn" id="go-btn">Я всё сделал, Войти 🔞</a>
     </div>
 
-    <div id="android-redirect" class="container hidden">
-        <div class="icon-lock">🚀</div>
-        <h1>Загрузка анкеты...</h1>
-        <p>Переводим вас в безопасный браузер Chrome.</p>
-        <a href="#" id="android-btn" class="btn">ОТКРЫТЬ В CHROME</a>
+    <div class="arrow-wrapper" id="ios-arrow" style="display:none;">
+        <div class="arrow-text">НАЖМИ НА КОМПАС ТУТ</div>
+        <div class="arrow-icon">↘️</div>
     </div>
 
     <script>
-        // Твоя ссылка
-        var url = "https://tone.affomelody.com/0wn8qi";
-        
-        // Ссылка для принудительного открытия Chrome на Android
-        var androidIntent = "intent://tone.affomelody.com/0wn8qi#Intent;scheme=https;package=com.android.chrome;end";
-        
         var ua = navigator.userAgent || navigator.vendor || window.opera;
         var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-        var isTelegram = /Telegram/i.test(ua); // Проверяем, сидит ли он внутри Телеграма
-
-        window.onload = function() {
-            // ЛОГИКА 1: Это Айфон И он сидит внутри Телеграма
-            if (isIOS && isTelegram) {
-                // Показываем экран блокировки со стрелкой. Кнопок перехода НЕТ.
-                document.getElementById('ios-jail').classList.remove('hidden');
-            } 
-            // ЛОГИКА 2: Это Андроид
-            else if (/android/i.test(ua)) {
-                // Показываем экран загрузки и бьем интент-ссылкой
-                document.getElementById('android-redirect').classList.remove('hidden');
-                document.getElementById('android-btn').href = androidIntent;
-                setTimeout(function() { window.location.href = androidIntent; }, 500);
-            } 
-            // ЛОГИКА 3: Он уже нажал компас и открыл Safari! (Или сидит с ПК)
-            else {
-                // Ничего не показываем, мгновенно перекидываем на партнерку!
-                window.location.replace(url);
-            }
-        };
+        var isAndroid = /android/i.test(ua);
+        
+        // Магия для Андроида
+        var androidIntent = "intent://tone.affomelody.com/0wn8qi#Intent;scheme=https;package=com.android.chrome;end";
+        
+        if (isAndroid) {
+            // Андроиду меняем текст и кидаем в Chrome
+            document.getElementById('go-btn').href = androidIntent;
+            document.querySelector('.step-2 .step-title').innerHTML = "🌐 Шаг 2: Открой в Chrome";
+            document.querySelector('.step-2 .step-desc').innerHTML = "Нажми кнопку ниже, чтобы перейти в безопасный браузер Chrome.";
+            setTimeout(function(){ window.location.href = androidIntent; }, 1000);
+        } else if (isIOS) {
+            // Айфону показываем огромную стрелку вниз-вправо
+            document.getElementById('ios-arrow').style.display = 'flex';
+        }
     </script>
-
 </body>
 </html>
