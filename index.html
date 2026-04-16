@@ -33,29 +33,61 @@
             max-width: 300px;
             box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
         }
-        .warning {
-            margin-top: 25px;
-            font-size: 13px;
-            color: #ff4757;
-            background: rgba(255, 71, 87, 0.1);
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid rgba(255, 71, 87, 0.3);
+        #instruction {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 235, 59, 0.1);
+            border-radius: 10px;
+            font-size: 16px;
+            color: #ffeb3b;
+            border: 2px dashed #ffeb3b;
+            width: 85%;
+            max-width: 350px;
+            line-height: 1.6;
+        }
+        .arrow {
+            font-size: 40px;
+            display: block;
+            margin-top: 15px;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
         }
     </style>
 </head>
 <body>
 
     <h2>Анкета готова к просмотру 🔞</h2>
-    <p>Телеграм может блокировать фото. Нажми кнопку ниже, чтобы открыть анкету в безопасном браузере.</p>
+    <p>Телеграм может блокировать фото. Нажми кнопку ниже, чтобы открыть анкету.</p>
 
-    <a href="https://tone.affomelody.com/0wn8qi" target="_blank" rel="noopener noreferrer" class="btn">
+    <a href="https://tone.affomelody.com/0wn8qi" target="_blank" rel="noopener noreferrer" class="btn" id="go-btn">
         ОТКРЫТЬ В БРАУЗЕРЕ
     </a>
 
-    <div class="warning">
-        ⚠️ <b>Важно:</b> Если регистрация выдает ошибку — выключите VPN. Наш сайт работает только с реальными пользователями.
-    </div>
+    <div id="instruction"></div>
+
+    <script>
+        document.getElementById('go-btn').addEventListener('click', function(e) {
+            // Определяем устройство пользователя
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            var instr = document.getElementById('instruction');
+            
+            // Показываем блок с инструкцией
+            instr.style.display = 'block';
+
+            // Если это iPhone / iPad (iOS)
+            if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+                instr.innerHTML = "<b>У ТЕБЯ АЙФОН? 🍎</b><br><br>Сайт не откроется внутри Телеграма!<br>Нажми на значок <b>КОМПАСА</b> в правом нижнем углу экрана, чтобы перейти к анкете! <span class='arrow'>↘️</span>";
+            } 
+            // Если это Android или ПК
+            else {
+                instr.innerHTML = "<b>ВАЖНО! 🤖</b><br><br>Сайт может выдать ошибку внутри Телеграма.<br>Нажми на <b>ТРИ ТОЧКИ</b> в правом верхнем углу и выбери <b>«Открыть в браузере»</b>! <span class='arrow'>↗️</span>";
+            }
+        });
+    </script>
 
 </body>
 </html>
