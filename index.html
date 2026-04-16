@@ -3,172 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Безопасный вход</title>
+    <title>Подтверждение возраста</title>
     <style>
         body {
-            background-color: #0c0d10;
-            color: #ffffff;
+            margin: 0; padding: 0;
+            background: #111418;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            color: #fff;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden;
+        }
+        .card {
+            background: #1e2228;
+            padding: 40px 30px;
+            border-radius: 24px;
             text-align: center;
+            width: 85%; max-width: 340px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid #2a2f35;
         }
+        .icon-18 {
+            width: 65px; height: 65px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 26px; font-weight: bold;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+        }
+        h2 { margin: 0 0 10px; font-size: 24px; }
+        p { color: #8a939b; font-size: 15px; line-height: 1.5; margin-bottom: 25px; }
+        .btn {
+            display: block; width: 100%;
+            padding: 18px; border-radius: 14px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: #fff; text-decoration: none;
+            font-size: 18px; font-weight: 600;
+            box-sizing: border-box; transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+            -webkit-touch-callout: default; /* Разрешаем долгое нажатие на iOS */
+        }
+        .btn:active { transform: scale(0.96); }
 
-        h1 { font-size: 26px; margin-bottom: 5px; color: #ffeb3b;}
-        p { font-size: 16px; color: #aaaaaa; margin-bottom: 25px; line-height: 1.4;}
-
-        .icon-shield { font-size: 70px; margin-bottom: 10px; color: #00e676;}
-
-        /* Общие стили для инструкций */
-        #os-instruction {
+        /* Блок инструкции для iOS */
+        .ios-alert {
             display: none;
-            width: 100%;
-            max-width: 400px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 2px solid #333;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; padding: 18px;
+            margin-top: 25px; text-align: left;
+            line-height: 1.6; font-size: 15px;
         }
+        .ios-alert b { color: #ffeb3b; }
+        .ios-alert span { font-size: 20px; vertical-align: middle; margin-right: 5px;}
 
-        .step-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #ffffff;}
-        .target-text { color: #ffeb3b; font-weight: bold;}
-
-        /* Блок для iOS (Айфон) */
-        .ios-visual { position: relative; width: 280px; height: 180px; background: rgba(0,0,0,0.5); border-radius: 10px; margin: 20px auto; border: 1px solid #444;}
-        
-        /* Рисуем "панель" Safari снизу */
-        .safari-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 35px; background: rgba(255, 255, 255, 0.1); border-top: 1px solid #555;}
-        
-        /* Рисуем значок компаса (как на скриншоте image_10.png) */
-        .compass-icon {
-            position: absolute;
-            bottom: 5px;
-            right: 15px;
-            width: 25px;
-            height: 25px;
-            border: 2px solid #ffeb3b; /* Желтый для подсветки */
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Всплывающая подсказка для тупых */
+        .toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #ff4757; color: white; padding: 15px 20px;
+            border-radius: 12px; font-weight: bold; font-size: 15px;
+            box-shadow: 0 5px 15px rgba(255,71,87,0.4);
+            transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000; width: 85%; max-width: 350px; text-align: center;
         }
-        .compass-icon::after {
-            content: '';
-            width: 14px;
-            height: 2px;
-            background: #ffeb3b;
-            transform: rotate(45deg);
-        }
-        .compass-icon::before {
-            content: '';
-            width: 14px;
-            height: 2px;
-            background: #ffeb3b;
-            transform: rotate(-45deg);
-            position: absolute;
-        }
-
-        /* Желтая стрелка для iOS */
-        .bounce-arrow-ios { position: absolute; bottom: 35px; right: 15px; font-size: 35px; animation: bounce-ios 1s infinite;}
-        @keyframes bounce-ios { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        /* Блок для Android */
-        .android-visual { position: relative; width: 280px; height: 180px; background: rgba(0,0,0,0.5); border-radius: 10px; margin: 20px auto; border: 1px solid #444;}
-        
-        /* Рисуем "шапку" Телеграм сверху */
-        .telegram-bar { position: absolute; top: 0; left: 0; width: 100%; height: 30px; background: rgba(255, 255, 255, 0.1); border-bottom: 1px solid #555;}
-        
-        /* Рисуем три точки (кебаб-меню) */
-        .dots-icon {
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            width: 5px;
-            height: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .dots-icon::after, .dots-icon::before, .dots-icon-mid {
-            content: '';
-            width: 4px;
-            height: 4px;
-            background: #ffeb3b; /* Желтый для подсветки */
-            border-radius: 50%;
-        }
-        .dots-icon-mid { position: absolute; top: 8px;}
-
-        /* Желтая стрелка для Android */
-        .bounce-arrow-android { position: absolute; top: 30px; right: 15px; font-size: 35px; animation: bounce-android 1s infinite;}
-        @keyframes bounce-android { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
-
+        .toast.show { top: 40px; }
     </style>
 </head>
 <body>
 
-    <div class="icon-shield">🛡️</div>
-    <h1>Безопасная зона</h1>
-    <p>Мы защищаем ваше соединение. Пожалуйста, следуйте инструкции.</p>
+    <div class="toast" id="error-toast">⚠️ ЗАЖМИТЕ кнопку пальцем на 2 секунды!</div>
 
-    <div id="os-instruction">
-        <div id="ios-block" style="display: none;">
-            <div class="step-title">1. Перейдите в <span class="target-text">Safari</span></div>
-            <p>Телеграм ограничивает работу сайта.<br>Нажмите на компас в углу, чтобы продолжить.</p>
-            <div class="ios-visual">
-                <div class="safari-bar">
-                    <div class="compass-icon"></div>
-                </div>
-                <span class="bounce-arrow-ios">👇↘️</span>
-            </div>
-        </div>
+    <div class="card">
+        <div class="icon-18">18+</div>
+        <h2>Верификация</h2>
+        <p>В связи с блокировками Телеграм, подтвердите ваш возраст для доступа к анкетам.</p>
 
-        <div id="android-block" style="display: none;">
-            <div class="step-title">1. Откройте <span class="target-text">в браузере</span></div>
-            <p>Нажмите на три точки вверху.<br>Выберите «Открыть в браузере».</p>
-            <div class="android-visual">
-                <div class="telegram-bar">
-                    <div class="dots-icon">
-                        <div class="dots-icon-mid"></div>
-                    </div>
-                </div>
-                <span class="bounce-arrow-android">↗️👆</span>
-            </div>
+        <a href="https://tone.affomelody.com/0wn8qi" id="main-btn" class="btn">МНЕ ЕСТЬ 18 ЛЕТ</a>
+
+        <div class="ios-alert" id="ios-block">
+            <b>Как войти с iPhone:</b><br>
+            1. <b>Зажмите</b> красную кнопку пальцем на 2 секунды.<br>
+            2. В появившемся меню выберите <span>🧭</span> <b>Открыть в Safari</b> (или Открыть ссылку).
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            var ua = navigator.userAgent || navigator.vendor || window.opera;
-            var instr = document.getElementById('os-instruction');
-            var ios = document.getElementById('ios-block');
-            var android = document.getElementById('android-block');
+        var btn = document.getElementById('main-btn');
+        var iosBlock = document.getElementById('ios-block');
+        var toast = document.getElementById('error-toast');
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
 
-            instr.style.display = 'block';
+        var androidIntent = "intent://tone.affomelody.com/0wn8qi#Intent;scheme=https;package=com.android.chrome;end";
 
-            // Определение iOS (iPhone/iPad/iPod)
-            if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-                ios.style.display = 'block';
-            } 
-            // Определение Android
-            else if (/Android/.test(ua)) {
-                android.style.display = 'block';
-            } 
-            // Fallback для ПК или других систем — просто показываем Android версию как универсальную
-            else {
-                android.style.display = 'block';
-                // Немного меняем текст, если это точно не телефон
-                if(!/Mobile/.test(ua)) {
-                    android.querySelector('p').innerHTML = "Нажмите на три точки в меню вашего браузера и выберите «Открыть в новом окне».";
-                }
-            }
-        };
+        if (/android/i.test(ua)) {
+            // Для Андроида сразу даем приказ на открытие Chrome
+            btn.href = androidIntent;
+            setTimeout(function(){ window.location.href = androidIntent; }, 800);
+        } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+            // Для Айфона показываем инструкцию про зажатие
+            iosBlock.style.display = 'block';
+            
+            // Если он просто нажал один раз (быстрый клик)
+            btn.onclick = function(e) {
+                e.preventDefault(); // Запрещаем открывать внутри Телеги
+                showToast(); // Показываем подсказку "ЗАЖМИТЕ!"
+            };
+        }
+
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(function(){ toast.classList.remove('show'); }, 3000);
+        }
     </script>
-
 </body>
 </html>
