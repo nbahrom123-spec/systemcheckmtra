@@ -16,16 +16,24 @@
             text-align: center; position: relative; z-index: 10;
         }
         h2 { color: #d32f2f; margin-top: 0; margin-bottom: 15px; font-size: 22px; }
-        p { color: #555; font-size: 15px; line-height: 1.4; margin-bottom: 25px; }
+        
+        .warning-box {
+            background: #ffebee; border-left: 4px solid #d32f2f; padding: 12px;
+            border-radius: 6px; text-align: left; margin-bottom: 20px;
+        }
+        .warning-box b { color: #d32f2f; font-size: 15px; }
+        .warning-box p { margin: 5px 0 0 0; font-size: 13px; color: #333; line-height: 1.4; }
+
+        p.question { color: #555; font-size: 15px; line-height: 1.4; margin-bottom: 20px; font-weight: bold; }
 
         .btn { 
             display: block; width: 100%; padding: 16px 10px; border-radius: 8px; 
             text-decoration: none; font-weight: bold; margin-bottom: 15px; 
-            box-sizing: border-box; font-size: 15px; text-transform: uppercase;
+            box-sizing: border-box; font-size: 14px; text-transform: uppercase;
             border: none; cursor: pointer; transition: 0.2s;
         }
-        .btn-blue { background: #1976d2; color: #fff; }
-        .btn-green { background: #2e7d32; color: #fff; }
+        .btn-blue { background: #1976d2; color: #fff; box-shadow: 0 4px 10px rgba(25,118,210,0.3); }
+        .btn-green { background: #2e7d32; color: #fff; box-shadow: 0 4px 10px rgba(46,125,50,0.3); }
 
         /* Указатель на компас */
         .arrow-wrapper { 
@@ -46,22 +54,30 @@
         }
         
         #instruction-step { 
-            display: none; margin-top: 20px; padding: 15px; background: #fff9c4; 
-            border-radius: 8px; border: 1px solid #fbc02d; color: #f57f17; 
-            font-weight: bold; line-height: 1.4;
+            display: none; margin-top: 15px; padding: 18px; background: #fff9c4; 
+            border-radius: 8px; border: 1px solid #fbc02d; color: #d84315; 
+            font-size: 15px; text-align: left; line-height: 1.5;
         }
     </style>
 </head>
 <body>
     <div class="box" id="main-box">
-        <h2>⚠️ Ошибка доступа</h2>
-        <p id="main-text">Анкеты не открываются внутри Телеграма. Выберите, где вы сейчас находитесь:</p>
+        <h2>⚠️ Системный вход</h2>
+        
+        <div class="warning-box">
+            <b>Выключите VPN и ПРОКСИ</b>
+            <p>Сайт строго запрещает анонимайзеры. Если они включены, регистрация выдаст ошибку.</p>
+        </div>
 
-        <button class="btn btn-blue" id="btn-telegram">Я СИЖУ В ТЕЛЕГРАМЕ</button>
-        <button class="btn btn-green" id="btn-safari">Я УЖЕ В БРАУЗЕРЕ (SAFARI)</button>
+        <p class="question" id="main-text">Где вы сейчас находитесь?</p>
+
+        <button class="btn btn-blue" id="btn-telegram">Я сижу внутри Телеграма</button>
+        <button class="btn btn-green" id="btn-safari">Я уже в браузере (Safari)</button>
 
         <div id="instruction-step">
-            👇 Нажмите на значок КОМПАСА в правом нижнем углу экрана, чтобы перейти в безопасный браузер!
+            <b>Вам нужно выйти из Телеграма:</b><br><br>
+            1️⃣ Нажмите на значок <b>КОМПАСА</b> в правом нижнем углу экрана (туда показывает стрелка).<br><br>
+            2️⃣ Когда эта страница откроется в Safari, нажмите зеленую кнопку <b>«Я УЖЕ В БРАУЗЕРЕ»</b>.
         </div>
     </div>
 
@@ -79,20 +95,23 @@
 
         // Если Андроид - автоматический прыжок в Chrome без вопросов
         if (isAndroid) {
-            document.getElementById('main-box').innerHTML = "<h2>Загрузка...</h2><p>Переводим в безопасный браузер.</p>";
+            document.getElementById('main-box').innerHTML = "<h2 style='color:#1976d2;'>Загрузка...</h2><p style='color:#555;'>Переводим в безопасный браузер Chrome.</p>";
             setTimeout(function(){ window.location.href = androidIntent; }, 500);
         }
 
-        // Кнопка: Пользователь сам говорит, что он в Телеграме
+        // Кнопка: Пользователь нажимает "Я в Телеграме"
         document.getElementById('btn-telegram').addEventListener('click', function() {
+            // Прячем обе кнопки, чтобы он случайно не нажал зеленую внутри Телеграма
             this.style.display = 'none';
             document.getElementById('btn-safari').style.display = 'none';
             document.getElementById('main-text').style.display = 'none';
+            
+            // Показываем инструкцию из двух шагов и мигающую стрелку на компас
             document.getElementById('instruction-step').style.display = 'block';
             document.getElementById('ios-arrow').style.display = 'flex';
         });
 
-        // Кнопка: Пользователь сам говорит, что он в нормальном браузере
+        // Кнопка: Пользователь нажимает "Я в Safari" (сработает, когда страница загрузится заново после клика на компас)
         document.getElementById('btn-safari').addEventListener('click', function() {
             window.location.href = offerUrl;
         });
