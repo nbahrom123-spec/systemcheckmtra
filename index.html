@@ -3,73 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Подтверждение возраста</title>
+    <title>Быстрый опрос</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             margin: 0;
             padding: 0;
-            background-color: #121212;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Градиентный фон, типичный для дейтинг-тематики */
+            background: linear-gradient(135deg, #1c1936, #3a1c36);
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             text-align: center;
         }
         .container {
-            padding: 20px;
-            max-width: 90%;
-            width: 400px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 420px;
+            animation: fadeIn 0.5s ease-in-out;
         }
         h1 {
             font-size: 26px;
-            margin-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
         }
         p {
             font-size: 16px;
-            color: #a0a0a0;
-            margin-bottom: 40px;
             line-height: 1.5;
+            margin-bottom: 25px;
+            color: #e0e0e0;
         }
         .btn {
             display: block;
             width: 100%;
             padding: 16px;
-            margin-bottom: 15px;
+            margin: 12px 0;
             border: none;
             border-radius: 12px;
+            background: #e91e63; /* Яркий цвет кнопок */
+            color: white;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
-            text-decoration: none;
-            box-sizing: border-box;
-            transition: opacity 0.2s;
+            transition: background 0.3s, transform 0.1s;
+        }
+        .btn:hover {
+            background: #d81b60;
         }
         .btn:active {
-            opacity: 0.8;
+            transform: scale(0.98);
         }
-        .btn-yes {
-            background-color: #fe2c55; /* Цвет кнопки TikTok для нативности */
-            color: white;
+        /* Блок с предупреждением скрыт по умолчанию */
+        #vpn-warning {
+            display: none;
         }
-        .btn-no {
-            background-color: #2a2a2a;
-            color: #ffffff;
+        .warning-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Вам уже есть 18 лет?</h1>
-        <p>Для доступа к материалам сайта необходимо подтвердить свой возраст.</p>
 
-        <!-- Твоя партнерская ссылка зашита сюда -->
-        <a href="https://rubik.top/click?o=2&a=1551&sub_id2=Kaztitut" class="btn btn-yes">Да, мне есть 18</a>
-
-        <!-- Кнопка отвода глаз для модераторов ТикТока -->
-        <a href="https://google.com" class="btn btn-no">Нет, мне меньше 18</a>
+    <!-- Шаг 1: Основной опрос -->
+    <div class="container" id="step1">
+        <h1>Откуда ты?</h1>
+        <p>Выбери свою страну для продолжения:</p>
+        <!-- Кнопки, которые ведут сразу на оффер -->
+        <button class="btn" onclick="redirectToOffer()">Казахстан</button>
+        <button class="btn" onclick="redirectToOffer()">Украина</button>
+        <!-- Кнопка России вызывает предупреждение -->
+        <button class="btn" onclick="showVpnWarning()">Россия</button>
+        <!-- Кнопка для других стран ведет на оффер -->
+        <button class="btn" onclick="redirectToOffer()">Другая Страна</button>
     </div>
+
+    <!-- Шаг 2: Предупреждение о VPN (показывается только при клике на "Россия") -->
+    <div class="container" id="vpn-warning">
+        <div class="warning-icon">⚠️</div>
+        <h1>Внимание!</h1>
+        <p>Мы заметили, что вы из России. Для корректной регистрации и просмотра анкет, пожалуйста, <b>отключите VPN</b> прямо сейчас.</p>
+        <button class="btn" onclick="redirectToOffer()">Я отключил(а) VPN, продолжить</button>
+    </div>
+
+    <script>
+        // Ваша партнерская ссылка
+        const offerUrl = "https://rubik.top/click?o=2&a=1551";
+
+        // Функция прямого перехода на оффер
+        function redirectToOffer() {
+            window.location.href = offerUrl;
+        }
+
+        // Функция показа предупреждения о VPN
+        function showVpnWarning() {
+            // Скрываем блок с опросом
+            document.getElementById("step1").style.display = "none";
+            // Показываем блок с предупреждением
+            document.getElementById("vpn-warning").style.display = "block";
+        }
+    </script>
+
 </body>
 </html>
